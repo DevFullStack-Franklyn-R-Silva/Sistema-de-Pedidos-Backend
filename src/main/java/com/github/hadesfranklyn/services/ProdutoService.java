@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.hadesfranklyn.domain.Produto;
 import com.github.hadesfranklyn.repositories.ProdutoRepository;
+import com.github.hadesfranklyn.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ProdutoService {
@@ -16,6 +17,7 @@ public class ProdutoService {
 
 	public Produto buscar(Integer id) {
 		Optional<Produto> obj = repository.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Produto não encontrado! Id: " + id + ", Tipo: " + Produto.class.getName()));
 	}
 }
