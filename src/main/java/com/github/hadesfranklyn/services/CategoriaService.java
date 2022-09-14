@@ -3,11 +3,13 @@ package com.github.hadesfranklyn.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.github.hadesfranklyn.domain.Categoria;
 import com.github.hadesfranklyn.repositories.CategoriaRepository;
 import com.github.hadesfranklyn.services.exceptions.ObjectNotFoundException;
+import com.github.hadesfranklyn.services.exceptions.DataIntegrityException;
 
 @Service
 public class CategoriaService {
@@ -22,6 +24,7 @@ public class CategoriaService {
 	}
 
 	public Categoria inserir(Categoria obj) {
+		// Verificar se e null
 		obj.setId(null);
 		return repository.save(obj);
 	}
@@ -29,7 +32,19 @@ public class CategoriaService {
 	public Categoria atualizar(Categoria obj) {
 		// Verificar se objeto existe
 		buscar(obj.getId());
-
+		// Atualizar o objeto
 		return repository.save(obj);
+	}
+
+	public void deletar(Integer id) {
+		// Verificar se objeto existe
+		buscar(id);
+		
+		try {
+			// Deleta o objeto
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos!");
+		}
 	}
 }
