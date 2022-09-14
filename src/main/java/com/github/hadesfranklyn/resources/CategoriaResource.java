@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class CategoriaResource {
 	// BUSCAR UMA CATEGORIA
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
-		List<Categoria> list = service.buscarTodos();
+		List<Categoria> list = service.findAll();
 		List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
@@ -37,30 +39,32 @@ public class CategoriaResource {
 	// BUSCAR UMA CATEGORIA
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	// ADICIONAR UMA CATEGORIA
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj) {
-		obj = service.inserir(obj);
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDTO) {
+		Categoria obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
 	// ATUALIZAR UMA CATEGORIA
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> updated(@RequestBody Categoria obj, @PathVariable Integer id) {
+	public ResponseEntity<Void> updated(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id) {
+		Categoria obj = service.fromDTO(objDTO);
 		obj.setId(id);
-		obj = service.atualizar(obj);
+		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 
 	// DELETAR UM CATEGORIA
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		service.deletar(id);
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -71,7 +75,7 @@ public class CategoriaResource {
 			@RequestParam(value="orderBy", defaultValue ="nome")String orderBy, 
 			@RequestParam(value="direction", defaultValue ="ASC")String direction) {
 		
-		Page<Categoria> list = service.buscarPagina(page,linesPerPage, orderBy, direction);
+		Page<Categoria> list = service.findPage(page,linesPerPage, orderBy, direction);
 		Page<CategoriaDTO> listDto = list.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listDto);
 	}

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.github.hadesfranklyn.domain.Categoria;
+import com.github.hadesfranklyn.dto.CategoriaDTO;
 import com.github.hadesfranklyn.repositories.CategoriaRepository;
 import com.github.hadesfranklyn.services.exceptions.DataIntegrityException;
 import com.github.hadesfranklyn.services.exceptions.ObjectNotFoundException;
@@ -21,32 +22,32 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repository;
 
-	public List<Categoria> buscarTodos() {
+	public List<Categoria> findAll() {
 		return repository.findAll();
 	}
 
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 
-	public Categoria inserir(Categoria obj) {
+	public Categoria insert(Categoria obj) {
 		// Verificar se e null
 		obj.setId(null);
 		return repository.save(obj);
 	}
 
-	public Categoria atualizar(Categoria obj) {
+	public Categoria update(Categoria obj) {
 		// Verificar se objeto existe
-		buscar(obj.getId());
+		find(obj.getId());
 		// Atualizar o objeto
 		return repository.save(obj);
 	}
 
-	public void deletar(Integer id) {
+	public void delete(Integer id) {
 		// Verificar se objeto existe
-		buscar(id);
+		find(id);
 
 		try {
 			// Deleta o objeto
@@ -56,8 +57,12 @@ public class CategoriaService {
 		}
 	}
 
-	public Page<Categoria> buscarPagina(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 }
