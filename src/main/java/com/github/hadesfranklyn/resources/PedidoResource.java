@@ -7,19 +7,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.hadesfranklyn.domain.Cidade;
-import com.github.hadesfranklyn.services.CidadeService;
+import com.github.hadesfranklyn.domain.Pedido;
+import com.github.hadesfranklyn.services.PedidoService;
 
 @RestController
-@RequestMapping(value = "/cidades")
-public class CidadeResource {
-
+@RequestMapping(value = "/pedidos")
+public class PedidoResource {
+	
 	@Autowired
-	private CidadeService service;
+	private PedidoService service;
 
 	@RequestMapping(value = "/{id}" ,method = RequestMethod.GET)
-	public ResponseEntity<Cidade> find(@PathVariable Integer id) {
-		Cidade obj = service.buscar(id);
+	public ResponseEntity<Pedido> find(@PathVariable Integer id) {
+		Pedido obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	
 }
