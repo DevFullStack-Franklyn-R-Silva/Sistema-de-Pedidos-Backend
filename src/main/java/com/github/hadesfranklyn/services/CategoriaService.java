@@ -33,24 +33,23 @@ public class CategoriaService {
 	}
 
 	public Categoria insert(Categoria obj) {
-		// Verificar se e null
 		obj.setId(null);
 		return repository.save(obj);
 	}
 
 	public Categoria update(Categoria obj) {
-		// Verificar se objeto existe
-		find(obj.getId());
-		// Atualizar o objeto
-		return repository.save(obj);
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repository.save(newObj);
+	}
+
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 	}
 
 	public void delete(Integer id) {
-		// Verificar se objeto existe
 		find(id);
-
 		try {
-			// Deleta o objeto
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos!");
