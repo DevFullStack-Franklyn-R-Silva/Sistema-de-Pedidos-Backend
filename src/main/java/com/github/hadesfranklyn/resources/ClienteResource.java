@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.github.hadesfranklyn.domain.Cliente;
 import com.github.hadesfranklyn.dto.ClienteDTO;
+import com.github.hadesfranklyn.dto.ClienteNewDTO;
 import com.github.hadesfranklyn.services.ClienteService;
 
 @RestController
@@ -44,11 +45,12 @@ public class ClienteResource {
 	}
 
 	// ADICIONAR UMA Cliente
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDTO) {
-		Cliente obj = service.fromDTO(objDTO);
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
+		Cliente obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
