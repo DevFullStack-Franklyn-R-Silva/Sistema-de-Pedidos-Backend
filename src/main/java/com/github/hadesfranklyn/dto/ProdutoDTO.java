@@ -2,6 +2,8 @@ package com.github.hadesfranklyn.dto;
 
 import java.io.Serializable;
 
+import com.github.hadesfranklyn.domain.Produto;
+
 public class ProdutoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -10,7 +12,12 @@ public class ProdutoDTO implements Serializable {
 	private Double preco;
 
 	public ProdutoDTO() {
-		super();
+	}
+
+	public ProdutoDTO(Produto obj) {
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.preco = obj.getPreco();
 	}
 
 	public Integer getId() {
