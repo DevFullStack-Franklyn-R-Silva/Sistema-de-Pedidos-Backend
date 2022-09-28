@@ -68,6 +68,7 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	//BUSCA PAGINADA
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(value="page", defaultValue ="0") Integer page, 
