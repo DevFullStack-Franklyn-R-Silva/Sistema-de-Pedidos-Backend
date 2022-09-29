@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.github.hadesfranklyn.services.DBService;
+import com.github.hadesfranklyn.services.EmailService;
+import com.github.hadesfranklyn.services.MockEmailService;
 
 @Configuration
 @Profile("test")
@@ -22,5 +24,9 @@ public class testConfig {
 		dbService.instantieteTestDatabase();
 		return true;
 	}
-
+	
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
+	}
 }
