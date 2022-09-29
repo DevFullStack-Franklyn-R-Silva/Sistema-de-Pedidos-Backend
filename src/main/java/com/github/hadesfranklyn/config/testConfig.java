@@ -17,7 +17,7 @@ public class TestConfig {
 	private DBService dbService;
 
 	@Bean
-	public boolean instantieteDatabase() throws ParseException{
+	public boolean instantieteDatabase() throws ParseException {
 
 		dbService.instantieteTestDatabase();
 		return true;
