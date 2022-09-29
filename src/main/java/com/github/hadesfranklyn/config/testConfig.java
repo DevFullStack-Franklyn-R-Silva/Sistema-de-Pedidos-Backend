@@ -11,7 +11,7 @@ import com.github.hadesfranklyn.services.DBService;
 
 @Configuration
 @Profile("test")
-public class TestConfig {
+public class testConfig {
 
 	@Autowired
 	private DBService dbService;
