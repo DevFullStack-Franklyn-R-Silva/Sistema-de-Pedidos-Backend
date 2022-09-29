@@ -1,13 +1,19 @@
 package com.github.hadesfranklyn;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SistemaDePedidosApplication {
+public class SistemaDePedidosApplication  implements CommandLineRunner{
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaDePedidosApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		
 	}
 
 }
