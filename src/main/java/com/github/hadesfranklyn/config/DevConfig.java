@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.github.hadesfranklyn.services.DBService;
+import com.github.hadesfranklyn.services.EmailService;
+import com.github.hadesfranklyn.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -28,5 +30,11 @@ public class DevConfig {
 		dbService.instantieteTestDatabase();
 		return true;
 	}
-
+	
+	// Problema de enviar email resolvido
+	// https://stackoverflow.com/questions/26594097/javamail-exception-javax-mail-authenticationfailedexception-534-5-7-9-applicatio
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
+	}
 }
