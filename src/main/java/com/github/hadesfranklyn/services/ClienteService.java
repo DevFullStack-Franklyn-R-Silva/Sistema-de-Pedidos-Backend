@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.hadesfranklyn.domain.Cidade;
 import com.github.hadesfranklyn.domain.Cliente;
 import com.github.hadesfranklyn.domain.Endereco;
+import com.github.hadesfranklyn.domain.enums.Perfil;
 import com.github.hadesfranklyn.domain.enums.TipoCliente;
 import com.github.hadesfranklyn.dto.ClienteDTO;
 import com.github.hadesfranklyn.dto.ClienteNewDTO;
 import com.github.hadesfranklyn.repositories.ClienteRepository;
 import com.github.hadesfranklyn.repositories.EnderecoRepository;
+import com.github.hadesfranklyn.security.UserSS;
+import com.github.hadesfranklyn.services.exceptions.AuthorizationException;
 import com.github.hadesfranklyn.services.exceptions.DataIntegrityException;
 import com.github.hadesfranklyn.services.exceptions.ObjectNotFoundException;
 
@@ -40,9 +43,16 @@ public class ClienteService {
 	}
 
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		
+		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
 		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
 
 	@Transactional
